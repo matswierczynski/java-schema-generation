@@ -5,9 +5,10 @@ export function generateDtoTemplates(asyncapi) {
     const dtos = {}
 
     for (const channel of Object.values(asyncapi.channels())) {
-        if (channel.hasPublish()) {
-            const message = channel.publish().message()
-            dtos[toJavaClassName(message.uid())+'Event'] = message;
+        if (channel.publish()) {
+            for (const message of Object.values(channel.publish().messages())) {
+                dtos[toJavaClassName(message.uid())+'Event'] = message;
+            }
         }
     }
 
